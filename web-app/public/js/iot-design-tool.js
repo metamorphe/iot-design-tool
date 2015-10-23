@@ -1,5 +1,12 @@
 /* Constants and Globals */
-DEFAULT_COLOR = '#e9e9ff';
+const CANVAS_HEIGHT = 900;
+const CANVAS_WIDTH = 1440;
+const DEFAULT_COLOR = '#e9e9ff';
+const DEFAULT_COLOR_2= '#e74c3c';
+const GREY = '#7f8c8d';
+const MAX_DISTANCE = 600;
+const MAX_CIRCLE_INTERVAL = 10;
+const MIN_CIRCLE_INTERVAL = 10;
 
 var hitOptions = {
     segments: true,
@@ -30,6 +37,7 @@ var onKeyDown = function(event) {
 
 var recent;
 var recentCenter;
+var recentGroup;
 
 /* Node Tool */
 var nodeTool = new paper.Tool();
@@ -37,16 +45,16 @@ nodeTool.onMouseDown = function(event) {
     recent = null;
     project.activeLayer.selected = false;
     var hitResult = project.hitTest(event.point, hitOptions);
-    if (true) { // was if (!hitResult)
+    if (!hitResult) { // was if (!hitResult)
         var point = new Point(event.point);
         var circle = new Path.Circle({
             center: point,
             radius: 20,
-            fillColor: DEFAULT_COLOR,
+            fillColor: DEFAULT_COLOR_2,
         });
         circle.selected = true;
         recent = circle;
-        //$scope.nodeGroup.addChild(circle);
+        recentGroup = new Group();
     } else {
         hitResult.item.selected = true;
         recent = hitResult.item;
@@ -64,16 +72,21 @@ nodeTool.onMouseDrag = function(event) {
         var circle = new Path.Circle({
             center: recentCenter,
             radius: recentCenter.getDistance(event.point),
-            fillColor: {alpha: 0.0 },
-            strokeColor: DEFAULT_COLOR,
-            strokeWidth: 1
+            fillColor: { alpha: 0.0 },
+            strokeColor: DEFAULT_COLOR_2,
+            strokeWidth: 2
         });
+        circle.strokeColor.alpha =  1 - recentCenter.getDistance(event.point)
+            / MAX_DISTANCE;
+
+        recentGroup.addChild(circle);
     }
     else if (recent) {
         recent.position = recent.position.add(event.delta);
     }
 }
-nodeTool.minDistance = 20;
+nodeTool.minDistance = MAX_CIRCLE_INTERVAL;
+nodeTool.maxDistance = MIN_CIRCLE_INTERVAL;
 nodeTool.onKeyDown = onKeyDown;
 
 /* Main */
@@ -85,4 +98,7 @@ window.onload = function() {
     paper.install(window);
     nodeTool.activate();
     paper.view.draw();
+
+    // Load plan SVG
+    project.importSVG('../assets/symbiot_plan.svg');
 }
