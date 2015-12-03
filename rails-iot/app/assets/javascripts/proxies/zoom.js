@@ -1,7 +1,7 @@
 
 // zoom.js
 
-Zoom.STEP = 0.5;
+Zoom.STEP = 0.1;
 Zoom.MAX = 10;
 Zoom.MIN = 0.1;
 

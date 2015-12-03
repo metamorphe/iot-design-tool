@@ -67,7 +67,8 @@ CircuitDesigner.prototype = {
 		console.log("filename", fileType, filename);
 		this.paper.project.importSVG(filename, {
 	    	onLoad: function(item) { 
-	    		if(fileType == "artwork" || fileType == "iot"){
+	    		console.log(fileType)
+	    		if(fileType == "artwork" || fileType == "iot" || fileType == "floorplan"){
 	    			console.log(item);
 	    			scope.art_layer.add(item);
 			    	CircuitDesigner.retainGroup(item, position, callback, scope);

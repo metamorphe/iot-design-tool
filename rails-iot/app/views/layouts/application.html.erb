@@ -52,6 +52,12 @@
 	        <li class="<%= params[:action] == "home" ? "active" : "" %>">
 	        	<a href="/"> Home</a>
 	        </li>
+	         <li class="<%= params[:action] == "devices" ? "active" : "" %>">
+	        	<%= link_to "Devices", devices_index_path %>
+	        </li>
+	         <li class="<%= params[:action] == "stream" ? "active" : "" %>">
+	        	<%= link_to "Streams", stream_path %>
+	        </li>
 	        <li class="<%= params[:action] == "interface" ? "active" : "" %>">
 	        	<%= link_to "Design", jig_interface_path(1) %>
 	        </li>
